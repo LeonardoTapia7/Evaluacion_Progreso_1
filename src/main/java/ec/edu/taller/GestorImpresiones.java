@@ -9,8 +9,8 @@ public class GestorImpresiones {
     private int capacidadMaxima;
 
     public GestorImpresiones(int capacidadMaxima) {
-    this.capacidadMaxima = capacidadMaxima;
-    this.colaTrabajos = new PriorityQueue<>(Comparator.comparingInt(TrabajoImpresion::getPrioridad));
+        this.capacidadMaxima = capacidadMaxima;
+        this.colaTrabajos = new PriorityQueue<>(Comparator.comparingInt(TrabajoImpresion::getPrioridad));
     }
 
     public boolean registrarTrabajo(TrabajoImpresion trabajo) {
