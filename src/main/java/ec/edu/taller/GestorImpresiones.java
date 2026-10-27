@@ -1,4 +1,10 @@
-{
+package ec.edu.taller;
+
+import com.sun.java.accessibility.util.Translator;
+
+import java.util.*;
+
+public class GestorImpresiones {
     private Queue<TrabajoImpresion> colaTrabajos;
     private int capacidadMaxima;
 
