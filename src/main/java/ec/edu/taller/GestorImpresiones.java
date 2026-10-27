@@ -1,50 +1,73 @@
 package ec.edu.taller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import com.sun.java.accessibility.util.Translator;
 
-/** Completar la logica respetando el contrato descrito en README.md. */
+import java.util.*;
+
 public class GestorImpresiones {
     private Queue<TrabajoImpresion> colaTrabajos;
     private int capacidadMaxima;
 
     public GestorImpresiones(int capacidadMaxima) {
-        // TODO: guardar la capacidad e inicializar una cola con prioridad.
+    this.capacidadMaxima = capacidadMaxima;
+    this.colaTrabajos = new PriorityQueue<>(Comparator.comparingInt(TrabajoImpresion::getPrioridad));
     }
 
     public boolean registrarTrabajo(TrabajoImpresion trabajo) {
-        // TODO: validar, comprobar duplicados y capacidad, y registrar.
-        return false;
+        if (trabajo==null) {
+            return false;
+        }
+        String codigo = trabajo.getCodigo();
+
+        if (codigo==null || codigo.trim().isEmpty()) {
+            return false;
+        }
+        if (existeTrabajo(codigo)) {
+            return false;
+        }
+        if (colaTrabajos.size()>=capacidadMaxima) {
+            return false;
+        }
+        return colaTrabajos.offer(trabajo);
     }
 
     public boolean existeTrabajo(String codigo) {
-        // TODO: buscar por codigo entre los trabajos pendientes.
+        if (codigo==null || codigo.trim().isEmpty()) {
+            return false;
+        }
+        for (TrabajoImpresion trabajo : colaTrabajos) {
+            if (trabajo.getCodigo().equals(codigo)) {
+                return true;
+            }
+        }
         return false;
     }
 
     public TrabajoImpresion consultarSiguienteTrabajo() {
-        // TODO: consultar el trabajo de mayor prioridad sin retirarlo.
-        return null;
+        return colaTrabajos.peek();
     }
 
     public TrabajoImpresion procesarSiguienteTrabajo() {
-        // TODO: retirar el de mayor prioridad y cambiar su estado a PROCESADO.
-        return null;
+        TrabajoImpresion trabajo = colaTrabajos.poll();
+
+        if (trabajo==null) {
+            trabajo.setEstado("Procesado");
+        }
+        return trabajo;
     }
 
     public int contarTrabajosPendientes() {
-        // TODO: devolver la cantidad de trabajos en la cola.
-        return 0;
+        return  colaTrabajos.size();
     }
 
     public int consultarEspaciosDisponibles() {
-        // TODO: devolver capacidad maxima menos trabajos pendientes.
-        return 0;
+        return capacidadMaxima - colaTrabajos.size();
     }
 
     public List<TrabajoImpresion> listarTrabajos() {
-        // TODO: devolver una lista ordenada por prioridad sin alterar la cola.
-        return new ArrayList<>();
+        List<TrabajoImpresion> trabajosOrdenados = new ArrayList<>(colaTrabajos);
+
+        trabajosOrdenados.sort(Comparator.comparing(TrabajoImpresion::getPrioridad));
+        return trabajosOrdenados;
     }
 }
